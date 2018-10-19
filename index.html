@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Oficina IFSC</title>
+</head>
+<body>
+    <form name="todo-form" novalidate>
+        <fieldset>
+            <legend>To-Do List</legend>
+            <input type="text" name="task" autocomplete="off">
+
+            <button type="submit">Salvar</button>
+        </fieldset>
+    </form>
+
+    <ul id="todo-list">
+        <li id="3"><input type="checkbox" onchange="updateTaskStatus()"> lavar o delrey <button onclick="removeTask()">Apagar</button></li>
+        <li id="2"><input type="checkbox" onchange="updateTaskStatus()"> comprar maço de derby <button onclick="removeTask()">Apagar</button></li>
+        <li id="1"><input type="checkbox" onchange="updateTaskStatus()"> chamar o bozo <button onclick="removeTask()">Apagar</button></li>
+    </ul>
+
+    <script>
+        // Guarda os elementos em variáveis
+        var form = document.forms['todo-form'];
+        var list = document.getElementById('todo-list');
+
+        // Cria uma escuta de evento submit ao form
+        form.addEventListener('submit', function(event) {
+            // Previne que o form atualize a página
+            event.preventDefault();
+
+            // Guarda o input task
+            var taskInput = form.elements['task'];
+
+            // Pega a primeira task da lista
+            var firstListChild = list.firstElementChild;
+
+            // Cria um novo elemento de lista
+            var newTaskElement = createNewTaskElement(taskInput.value);
+
+            // Insere a nova task a lista
+            list.insertBefore(newTaskElement, firstListChild);
+
+            // Limpa o input task
+            taskInput.value = '';
+        });
+
+        // Cria um novo elemento de lista
+        function createNewTaskElement(task)
+        {
+            var taskElement = document.createElement('li');
+            var taskElementId = list.childElementCount + 1;
+
+            taskElement.id = taskElementId;
+
+            var taskCheckbox = document.createElement('input');
+            taskCheckbox.setAttribute("type", "checkbox");
+            taskCheckbox.onchange = updateTaskStatus;
+
+            var taskCheckboxLabel = document.createElement('span');
+            taskCheckboxLabel.innerText = ' '+ task + ' ';
+
+            var taskRemoveButton = document.createElement('button');
+            taskRemoveButton.innerText = 'Apagar';
+            taskRemoveButton.onclick = removeTask;
+
+            taskElement.appendChild(taskCheckbox);
+            taskElement.appendChild(taskCheckboxLabel);
+            taskElement.appendChild(taskRemoveButton);
+
+            return taskElement;
+        }
+
+        // Função para remover uma task
+        function updateTaskStatus(event)
+        {
+            // Escuta o objeto event
+            var event = window.event;
+
+            event.preventDefault();
+
+            var checkbox = event.target;
+            var listItem = checkbox.parentElement;
+
+            if (checkbox.checked) {
+                listItem.style.opacity = 0.5;
+            }
+            else {
+                listItem.style.opacity = 1;
+            }
+        }
+
+        // Função para remover uma task
+        function removeTask()
+        {
+            // Escuta o objeto event
+            var event = window.event;
+
+            event.preventDefault();
+
+            var element = event.target.parentElement;
+
+            element.remove();
+        }
+
+        // Cabô kkkk
+    </script>
+</body>
+</html>
